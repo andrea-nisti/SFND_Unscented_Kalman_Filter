@@ -1,3 +1,4 @@
 [submodule "src/simpleukf"]
 	path = src/simpleukf
 	url = https://github.com/andrea-nisti/simple-ukf.git
+	branch = master
