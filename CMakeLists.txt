@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
-add_definitions(-std=c++11)
+add_definitions(-std=c++17)
 
 set(CXX_FLAGS "-Wall")
 set(CMAKE_CXX_FLAGS, "${CXX_FLAGS}")
@@ -8,16 +8,17 @@ set(CMAKE_CXX_FLAGS, "${CXX_FLAGS}")
 project(playback)
 
 find_package(PCL 1.2 REQUIRED)
+add_subdirectory(src/simpleukf)
 
-include_directories(${PCL_INCLUDE_DIRS})
+add_library(crtv_fusion src/crtv_fusion_strategy/crtv_fusion_strategy.cpp src/crtv_fusion_strategy/crtv_fusion_strategy.h)
+target_include_directories(crtv_fusion PRIVATE src/crtv_fusion_strategy)
+target_link_libraries(crtv_fusion PRIVATE simpleukf)
+
+# polluting eigen namespace
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
 list(REMOVE_ITEM PCL_LIBRARIES "vtkproj4")
 
-
 add_executable (ukf_highway src/main.cpp src/ukf.cpp src/tools.cpp src/render/render.cpp)
-target_link_libraries (ukf_highway ${PCL_LIBRARIES})
-
-
-
-
+target_include_directories(ukf_highway PRIVATE ${PCL_INCLUDE_DIRS})
+target_link_libraries (ukf_highway ${PCL_LIBRARIES} crtv_fusion)

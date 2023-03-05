@@ -4,9 +4,11 @@
 
 //#include "render/render.h"
 #include "highway.h"
+#include "crtv_fusion_strategy/crtv_fusion_strategy.h"
 
 int main(int argc, char** argv)
 {
+	CRTVFusionStrategy strategy{};
 
 	pcl::visualization::PCLVisualizer::Ptr viewer(new pcl::visualization::PCLVisualizer("3D Viewer"));
 	viewer->setBackgroundColor(0, 0, 0);
