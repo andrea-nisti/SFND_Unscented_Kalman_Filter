@@ -30,7 +30,7 @@ UKF::UKF()
     bool is_initialized_ = false;
 
     // time when the state is true, in us
-    time_us_ = 0;
+    time_us_ = 0.0;
 
     // PLEASE Check src/simpleukf_tools.h for noise constants.
     // The main logic is encapsulated in the submodule src/simpleukf [https://github.com/andrea-nisti/simple-ukf]
@@ -39,6 +39,7 @@ UKF::UKF()
 void UKF::ProcessMeasurement(MeasurementPackage meas_package)
 {
     bool state_update{false};
+    static bool first_prediction_occurred{false};
     if (not is_initialized_)
     {
         // Initialize the filter with a laser measure
@@ -51,9 +52,7 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package)
             x_ = ctrv_ukf_filter_.GetCurrentStateVector();
             P_ = ctrv_ukf_filter_.GetCurrentCovarianceMatrix();
 
-            std::cout << ctrv_ukf_filter_.GetCurrentStateVector() << std::endl;
             is_initialized_ = true;
-            state_update = true;
         }
     }
     else
@@ -64,16 +63,17 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package)
         if (delta_t > 0.00001f)
         {
             Prediction(delta_t);
+            first_prediction_occurred = true;
             state_update = true;
         }
 
         // fuse correct measurement
-        if ((meas_package.sensor_type_ == MeasurementPackage::LASER) and use_laser_)
+        if ((meas_package.sensor_type_ == MeasurementPackage::LASER) and use_laser_ and first_prediction_occurred)
         {
             UpdateLidar(meas_package);
             state_update = true;
         }
-        else if ((meas_package.sensor_type_ == MeasurementPackage::RADAR) and use_radar_)
+        else if ((meas_package.sensor_type_ == MeasurementPackage::RADAR) and use_radar_ and first_prediction_occurred)
         {
             UpdateRadar(meas_package);
             state_update = true;
@@ -83,7 +83,6 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package)
             std::cout << "Received wrong sensor type, skipping package" << std::endl;
         }
     }
-
     // update last fusion timestamp and filter states
     if (state_update)
     {
@@ -106,6 +105,8 @@ void UKF::UpdateLidar(MeasurementPackage meas_package)
                                                         1, 0, 0, 0, 0,
                                                         0, 1, 0, 0, 0).finished();
     // clang-format on
+    LidarMeasurementModel::MeasurementVector measure;
+    measure.head(LidarMeasurementModel::n) = meas_package.raw_measurements_;
 
     auto strategy = simpleukf::ukf::LinearUpdateStrategy<CTRVProcessModel, LidarMeasurementModel>{H};
     ctrv_ukf_filter_.UpdateState<LidarMeasurementModel>(meas_package.raw_measurements_, strategy);
@@ -116,6 +117,9 @@ void UKF::UpdateLidar(MeasurementPackage meas_package)
 
 void UKF::UpdateRadar(MeasurementPackage meas_package)
 {
+    RadarMeasurementModel::MeasurementVector measure;
+    measure.head(RadarMeasurementModel::n) = meas_package.raw_measurements_;
+
     auto strategy = simpleukf::ukf::UnscentedUpdateStrategy<CTRVProcessModel, RadarMeasurementModel>{
         ctrv_ukf_filter_.GetCurrentPredictedSigmaMatrix()};
     ctrv_ukf_filter_.UpdateState<RadarMeasurementModel>(meas_package.raw_measurements_, strategy);
