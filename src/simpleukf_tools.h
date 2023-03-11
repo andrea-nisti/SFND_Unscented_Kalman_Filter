@@ -1,5 +1,5 @@
-#ifndef TOOLS_H_
-#define TOOLS_H_
+#ifndef SRC_SIMPLEUKF_TOOLS_H
+#define SRC_SIMPLEUKF_TOOLS_H
 
 #include "simpleukf/models/ctrv_models.h"
 #include "simpleukf/ukf/linear_update_strategy.h"
@@ -15,7 +15,7 @@ struct RadarNoiseConstants
     static constexpr double std_radrd = 0.3;
 };
 
-struct LaserNoiseConstants
+struct LidarNoiseConstants
 {
     // Laser measurement noise standard deviation position1 in m
     static constexpr double std_laspx = 0.15;
@@ -32,10 +32,10 @@ struct ProcessNoiseConstants
 
 using CTRVProcessModel = CTRVModel<ProcessNoiseConstants>;
 using RadarMeasurementModel = RadarModel<RadarNoiseConstants>;
-//using LaserMeasurementModel = LaserModel<LaserNoiseConstants>;
+using LidarMeasurementModel = LidarModel<LidarNoiseConstants>;
 
 using CTRVRadarUnscentedUpdate = simpleukf::ukf::LinearUpdateStrategy<CTRVProcessModel, RadarMeasurementModel>;
 
 using CTRVFusionFilter = simpleukf::ukf::UKF<CTRVProcessModel>;
 
-#endif
+#endif // SRC_SIMPLEUKF_TOOLS_H

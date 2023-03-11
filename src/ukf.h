@@ -4,7 +4,8 @@
 #include "Eigen/Dense"
 #include "measurement_package.h"
 #include "simpleukf_tools.h"
-
+namespace fusion
+{
 class UKF
 {
   public:
@@ -12,11 +13,6 @@ class UKF
      * Constructor
      */
     UKF();
-
-    /**
-     * Destructor
-     */
-    virtual ~UKF();
 
     /**
      * ProcessMeasurement
@@ -51,7 +47,7 @@ class UKF
     void UpdateRadar(MeasurementPackage meas_package);
 
     // Main fusion logic based on the submodule src/simpleukf
-    CTRVFusionFilter ctrv_ukf_filter_;
+    CTRVFusionFilter ctrv_ukf_filter_{};
 
     // initially set to false, set to true in first call of ProcessMeasurement
     bool is_initialized_;
@@ -65,5 +61,7 @@ class UKF
     // time when the state is true, in us
     long long time_us_;
 };
+
+}  // namespace fusion
 
 #endif  // UKF_H

@@ -68,7 +68,7 @@ struct Car
 	// distance between front of vehicle and center of gravity
 	float Lf;
 
-	UKF ukf;
+	fusion::UKF ukf;
 
 	//accuation instructions
 	std::vector<accuation> instructions;
@@ -92,6 +92,8 @@ struct Car
 		sinNegTheta = sin(-angle);
 		cosNegTheta = cos(-angle);
 	}
+
+	Car(const Car& car) = default;
 
 	// angle around z axis
 	Eigen::Quaternionf getQuaternion(float theta)
@@ -142,7 +144,7 @@ struct Car
 			instructions.push_back(a);
 	}
 
-	void setUKF(UKF tracker)
+	void setUKF(fusion::UKF tracker)
 	{
 		ukf = tracker;
 	}

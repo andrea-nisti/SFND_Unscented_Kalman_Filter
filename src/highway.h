@@ -52,7 +52,7 @@ public:
 		car1.setInstructions(car1_instructions);
 		if( trackCars[0] )
 		{
-			UKF ukf1;
+			fusion::UKF ukf1;
 			car1.setUKF(ukf1);
 		}
 		traffic.push_back(car1);
@@ -66,7 +66,7 @@ public:
 		car2.setInstructions(car2_instructions);
 		if( trackCars[1] )
 		{
-			UKF ukf2;
+			fusion::UKF ukf2;
 			car2.setUKF(ukf2);
 		}
 		traffic.push_back(car2);
@@ -90,7 +90,7 @@ public:
 		car3.setInstructions(car3_instructions);
 		if( trackCars[2] )
 		{
-			UKF ukf3;
+			fusion::UKF ukf3;
 			car3.setUKF(ukf3);
 		}
 		traffic.push_back(car3);
@@ -98,11 +98,11 @@ public:
 		lidar = new Lidar(traffic,0);
 	
 		// render environment
-		renderHighway(0,viewer);
-		egoCar.render(viewer);
-		car1.render(viewer);
-		car2.render(viewer);
-		car3.render(viewer);
+		// renderHighway(0,viewer);
+		// egoCar.render(viewer);
+		// car1.render(viewer);
+		// car2.render(viewer);
+		// car3.render(viewer);
 	}
 	
 	void stepHighway(double egoVelocity, long long timestamp, int frame_per_sec, pcl::visualization::PCLVisualizer::Ptr& viewer)
