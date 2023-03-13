@@ -13,6 +13,11 @@ class UKF
      * Constructor
      */
     UKF();
+    void PrintStates()
+    {
+        std::cout << "Mean\n" << x_ << "\n";
+        std::cout << "Cova\n" << P_ << std::endl;
+    }
 
     /**
      * ProcessMeasurement
@@ -50,7 +55,7 @@ class UKF
     CTRVFusionFilter ctrv_ukf_filter_{};
 
     // initially set to false, set to true in first call of ProcessMeasurement
-    bool is_initialized_;
+    bool is_initialized_{false};
 
     // if this is false, laser measurements will be ignored (except for init)
     bool use_laser_;

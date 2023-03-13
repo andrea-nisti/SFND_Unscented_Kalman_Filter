@@ -20,7 +20,7 @@ public:
 	// Parameters 
 	// --------------------------------
 	// Set which cars to track with UKF
-	std::vector<bool> trackCars = {true,false,false};
+	std::vector<bool> trackCars = {true,true,true};
 	// Visualize sensor measurements
 	bool visualize_lidar = false;
 	bool visualize_radar = false;
@@ -98,11 +98,11 @@ public:
 		lidar = new Lidar(traffic,0);
 	
 		// render environment
-		// renderHighway(0,viewer);
-		// egoCar.render(viewer);
-		// car1.render(viewer);
-		// car2.render(viewer);
-		// car3.render(viewer);
+		renderHighway(0,viewer);
+		egoCar.render(viewer);
+		car1.render(viewer);
+		car2.render(viewer);
+		car3.render(viewer);
 	}
 	
 	void stepHighway(double egoVelocity, long long timestamp, int frame_per_sec, pcl::visualization::PCLVisualizer::Ptr& viewer)

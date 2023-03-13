@@ -26,15 +26,13 @@ struct LidarNoiseConstants
 
 struct ProcessNoiseConstants
 {
-    static constexpr double nu_a = 30;
-    static constexpr double nu_psi_dd = 30;
+    static constexpr double nu_a = 3;
+    static constexpr double nu_psi_dd = 0.6;
 };
 
 using CTRVProcessModel = CTRVModel<ProcessNoiseConstants>;
 using RadarMeasurementModel = RadarModel<RadarNoiseConstants>;
 using LidarMeasurementModel = LidarModel<LidarNoiseConstants>;
-
-using CTRVRadarUnscentedUpdate = simpleukf::ukf::LinearUpdateStrategy<CTRVProcessModel, RadarMeasurementModel>;
 
 using CTRVFusionFilter = simpleukf::ukf::UKF<CTRVProcessModel>;
 
