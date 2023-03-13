@@ -3,8 +3,8 @@
 
 #include "simpleukf/models/ctrv_models.h"
 #include "simpleukf/ukf/linear_update_strategy.h"
-#include "simpleukf/ukf/unscented_update_strategy.h"
 #include "simpleukf/ukf/ukf.h"
+#include "simpleukf/ukf/unscented_update_strategy.h"
 
 using namespace simpleukf::models;
 
@@ -36,4 +36,4 @@ using LidarMeasurementModel = LidarModel<LidarNoiseConstants>;
 
 using CTRVFusionFilter = simpleukf::ukf::UKF<CTRVProcessModel>;
 
-#endif // SRC_SIMPLEUKF_TOOLS_H
+#endif  // SRC_SIMPLEUKF_TOOLS_H

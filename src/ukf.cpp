@@ -56,7 +56,7 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package)
     {
         const double delta_t = (meas_package.timestamp_ - time_us_) / 1e6;
         Prediction(delta_t);
-        
+
         // RUN this logic if skipping predictions when observations with same timestamp arrives
         // unfortunately, for some reason it makes the rmse test fail
         // if (delta_t > 0.0)
@@ -73,7 +73,6 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package)
         else if ((meas_package.sensor_type_ == MeasurementPackage::RADAR) and use_radar_)
         {
             UpdateRadar(meas_package);
-            
         }
         else
         {
